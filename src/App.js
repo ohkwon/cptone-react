@@ -1,23 +1,42 @@
-import logo from './logo.svg';
-import './App.css';
+import React, {useState} from "react";
 
-function App() {
+const App = () => {
+  const [state, setState] = useState([])
+
+  const getRequest = () => {
+    fetch("https://reqres.in/api/users")
+      .then(res => res.json())
+      .then(
+        (result) => {
+          setState(result.data);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+  }
+
+  const renderStateInfo = () => {
+    if (state.constructor !== Array) return;
+    
+    return (
+      <ul>
+        {state.map(user => (
+          <li key={user.id}>{user.last_name}, {user.first_name}</li>
+        ))}
+      </ul>
+    );
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+    <div>
+      <header>
+        header
       </header>
+      <button onClick={getRequest}>Load sample API</button>
+      <div>
+        {renderStateInfo()}
+      </div>
     </div>
   );
 }
